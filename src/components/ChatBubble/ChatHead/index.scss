@@ -1,0 +1,38 @@
+.chat-head-container {
+  padding: 0 15px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-sizing: border-box;
+  width: 100%;
+  border-left: 3px solid;
+  &:lang(ar) {
+    border-left: none;
+    border-right: 3px solid;
+  }
+
+  .chat-head {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #eeeeee;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 10px 0;
+  }
+  .chat-info {
+    margin-left: 10px;
+    &:lang(ar) {
+      margin-left: 0;
+      margin-right: 10px;
+    }
+    h4 {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+    p {
+      margin: 0;
+      font-size: 0.8rem;
+      color: #666;
+    }
+  }
+}

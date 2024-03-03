@@ -1,0 +1,31 @@
+.file-uploader-container {
+  display: flex;
+  align-items: center;
+  .selected-file {
+    border: 1px solid #eeeeee;
+    padding: 0.25rem;
+    border-radius: 0.25rem;
+    margin: 0 0.5rem;
+    font-size: 0.875rem;
+    color: #172b4d;
+    display: flex;
+    align-items: center;
+
+    > span {
+      margin: 0 0.5rem;
+      cursor: pointer;
+      color: #970000;
+      font-size: 1.25rem;
+    }
+  }
+  .file-uploader {
+    height: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    img {
+      height: 100%;
+    }
+  }
+}

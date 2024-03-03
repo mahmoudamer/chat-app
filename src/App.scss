@@ -1,0 +1,27 @@
+.app {
+  direction: ltr;
+
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+
+    // background-color: #009ddd;
+    color: rgb(39, 39, 39);
+    font-weight: bold;
+    h3 {
+      margin: 0;
+    }
+    .lang-switcher {
+      color: rgb(39, 39, 39);
+      // color: white;
+      cursor: pointer;
+    }
+  }
+}
+
+.app.rtl {
+  direction: rtl;
+}
