@@ -14,8 +14,8 @@ export interface Message {
   content: string;
   user_id: number;
   type: MessageType;
-  file?: FileInterface;
-  audio?: FileInterface;
+  file?: string;
+  audio?: string;
 }
 
 export interface ChatBubbleProps {

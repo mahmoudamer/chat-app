@@ -1,13 +1,12 @@
-import React, { useRef, useState } from "react";
+import React, { FC, useRef, useState } from "react";
 import attachSquare from "../../../assets/images/attach-square.svg";
 import "./index.scss";
-function FileUploader() {
-  const [selectedFile, setSelectedFile] = useState<any>(null);
+const FileUploader: FC<any> = ({
+  handleInputChange,
+  setSelectedFile,
+  selectedFile,
+}) => {
   const fileInputRef = useRef<any>();
-
-  const handleInputChange = (event: any) => {
-    setSelectedFile(event?.target.files[0]);
-  };
 
   const handleDeleteFile = () => {
     setSelectedFile(null);
@@ -29,11 +28,11 @@ function FileUploader() {
           type="file"
           id="file-upload"
           hidden
-          onChange={handleInputChange}
+          onChange={(e) => handleInputChange(e)}
         />
       </label>
     </div>
   );
-}
+};
 
 export default FileUploader;

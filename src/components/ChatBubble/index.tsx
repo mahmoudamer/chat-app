@@ -1,4 +1,4 @@
-import { useState, FC, useEffect } from "react";
+import { useState, FC, useEffect, useRef } from "react";
 import ChatHead from "./ChatHead";
 import { ChatBubbleProps } from "./interfaces";
 import ChatMessage from "./ChatMessage";
@@ -7,17 +7,24 @@ import UserAvatar from "./../shared/UserAvater/index";
 import { useTranslation } from "react-i18next";
 import FileUploader from "../shared/FileUploader";
 import VoiceRecorder from "../shared/VoiceRecorder";
-// import VoiceRecorder from "../shared/VoiceRecorder";
-
-const ChatBubble: FC<ChatBubbleProps> = ({ chats }) => {
+import { chats } from "../data";
+import { MessageType } from "./enums";
+const ChatBubble: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedChatId, setSelectedChatId] = useState(1);
   const [selectedChat, setSelectedChat] = useState<any>(null);
-  const [recordedBlob, setRecordedBlob] = useState(null);
-
+  const [recordedURL, setRecordedURL] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<any>(null);
+  const [newMessage, setNewMessage] = useState("");
   const { t } = useTranslation();
+  const scrollableDivRef = useRef(null);
+
+  const handleInputChange = (event: any) => {
+    setSelectedFile(event?.target.files[0]);
+  };
 
   useEffect(() => {
+    scrollToBottom(scrollableDivRef);
     const mediaQuery = window.matchMedia("(max-width: 768px)");
 
     const handleResize = (event: any) => {
@@ -31,13 +38,52 @@ const ChatBubble: FC<ChatBubbleProps> = ({ chats }) => {
     };
   }, []);
 
-  const toggleOpen = () => setIsOpen(!isOpen);
+  const toggleOpen = () => {
+    setIsOpen(!isOpen);
+    handleOpenChat(chats[0]);
+  };
   const handleOpenChat = (chat: any) => {
     setSelectedChatId(chat.id);
     setSelectedChat(chat);
   };
-  const getRecording = (recording: any) => {
-    setRecordedBlob(recording);
+  const getRecording = async (recording: any) => {
+    const url = await URL.createObjectURL(recording);
+    setRecordedURL(url);
+    sendVoiceMessage();
+  };
+
+  const sendMessage = () => {
+    const toBeSentMessage = {
+      id: 1,
+      sender: "Me",
+      timestamp: new Date().toISOString(),
+      content: newMessage,
+      user_id: 1,
+      type: selectedFile ? MessageType.File : MessageType.Text,
+      file: selectedFile?.name,
+    };
+    selectedChat.messages.push(toBeSentMessage);
+    setNewMessage("");
+    setSelectedFile(null);
+    scrollToBottom(scrollableDivRef);
+  };
+  const scrollToBottom = (elRef: any) => {
+    if (elRef.current) elRef.current.scrollTop = elRef.current.scrollHeight;
+  };
+  const sendVoiceMessage = () => {
+    const toBeSentMessage = {
+      id: 1,
+      sender: "Me",
+      timestamp: new Date(),
+      content: "",
+      user_id: 1,
+      type: MessageType.Audio,
+      audio: recordedURL,
+    };
+    console.log("toBeSentMessage", toBeSentMessage);
+    selectedChat.messages.push(toBeSentMessage);
+    setRecordedURL(null);
+    scrollToBottom(scrollableDivRef);
   };
 
   const renderedChats = chats.map((chat) => (
@@ -71,18 +117,28 @@ const ChatBubble: FC<ChatBubbleProps> = ({ chats }) => {
                 {selectedChat?.name}
               </div>
             </div>
-            <div className="messages-container">{renderedMessages}</div>
+            <div ref={scrollableDivRef} className="messages-container">
+              {renderedMessages}
+            </div>
             <div className="controls-container">
               <div className="controls">
                 <input
                   className="input-text"
                   type="text"
                   placeholder={t("Type your message...")}
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
                 />
                 <div className="buttons-container">
-                  <button className="send-button">{t("Send")}</button>
+                  <button className="send-button" onClick={sendMessage}>
+                    {t("Send")}
+                  </button>
                   <div className="upload-and-record-container">
-                    <FileUploader />
+                    <FileUploader
+                      handleInputChange={handleInputChange}
+                      setSelectedFile={setSelectedFile}
+                      selectedFile={selectedFile}
+                    />
                     <VoiceRecorder getRecording={getRecording} />
                   </div>
                 </div>

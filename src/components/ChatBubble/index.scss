@@ -9,10 +9,12 @@
   padding: 2px;
   margin: 5px;
   cursor: pointer;
-  transform: translate(calc(100vw - 7rem), calc(100vh - 10rem));
+  transform: translateY(calc(100vh - 10rem));
   animation: close-animation 0.3s ease-in-out;
+  z-index: 1000;
+  position: relative;
   &.open-head {
-    transform: translate(0, 0);
+    transform: translateY(0);
     animation: open-animation 0.3s ease-in-out;
   }
 }
@@ -25,7 +27,7 @@
   border-radius: 10px;
   transition: opacity 0.3s ease-out;
   opacity: 0;
-
+  height: 77vh;
   &.open {
     transition: opacity 0.3s ease-in-out;
     opacity: 1;
@@ -37,7 +39,7 @@
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
     width: 33%;
     padding: 0.75rem 0;
-    min-height: 100%;
+    overflow-y: auto;
   }
   .chat-content {
     border-radius: 5px;
@@ -63,6 +65,7 @@
     }
     .messages-container {
       overflow-y: auto;
+      height: 45vh;
     }
     .controls-container {
       padding: 1rem;
@@ -118,17 +121,17 @@
 
 @keyframes open-animation {
   from {
-    transform: translate(calc(100vw - 7rem), calc(100vh - 10rem));
+    transform: translateY(calc(100vh - 10rem));
   }
   to {
-    transform: translate(0, 0);
+    transform: translateY(0);
   }
 }
 @keyframes close-animation {
   from {
-    transform: translate(0, 0);
+    transform: translateY(0, 0);
   }
   to {
-    transform: translate(calc(100vw - 7rem), calc(100vh - 10rem));
+    transform: translateY(calc(100vh - 10rem));
   }
 }
